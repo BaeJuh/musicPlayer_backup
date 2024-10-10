@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+
+    <link rel="icon" href="images/favicon/MusicPlay_favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <link rel="stylesheet" href="musicPlayer.css">
+        
+</head>
+
+<body>
+    <section id="siteBackground" class="siteBackground"></section>
+    
+    <main id="playerArea" class="playerArea neumorphism">
+        <section id="upperMenuArea" class="upperMenuArea">
+            <label>
+                <i class="xi-cog xi-3x settingIcon"></i>
+                <input id="colorChoicer" class="colorChoicer" type="color">
+            </label>
+            <button id="settingButton" class="settingButton upperButton floatRight">
+            </button>
+        </section>
+        
+        <audio id="song" class="song"></audio>
+        <section id="coverArea" class="coverArea smallNeumorphism">
+            <img id="coverImg" class="coverImg">
+        </section>
+        <section id="infoArea " class="infoArea bigAreaStyle">
+            <h2 id="songTitle" class="songTitle">Title</h2>
+            <h3 id="singer" class="singer">Singer</h3>
+        </section>
+        <section id="controlArea" class="controlArea">
+            <input id="songControl" class="songControl pointer" type="range" min="0" max="100" step="0.1" value="0"/>
+			<p id="songCurrentTime" class="time floatLeft">00:00</p>
+			<p id="songEndTime" class="time floatRight">00:00</p>
+        </section>
+        <section id="buttons" class="buttons">
+            <!--Shuffle Button-->
+            <button id="shuffle" class="buttonStyle pointer smallNeumorphism">
+                <i class="xi-shuffle xi-2x"></i>
+            </button>
+            <!--Prev Button-->
+            <button id="prev" class="buttonStyle pointer smallNeumorphism">
+                <i class="xi-step-backward xi-3x"></i>
+            </button>
+            <!--Play Button-->
+            <button id="playToggle" class="playToggle pointer smallNeumorphism">
+                <i id="playToggleImage" class="xi-play xi-5x toggleIcon"></i>
+            </button>
+            <!--Next Button-->
+            <button id="next" class=" buttonStyle pointer smallNeumorphism">
+                <i class="xi-step-forward xi-3x"></i>
+            </button>
+            <!--Repeat Button-->
+            <button id="repeat" class="buttonStyle pointer smallNeumorphism">
+                <i class="xi-repeat xi-2x"></i>
+            </button>
+        </section>
+
+        <section id="underMenuArea" class="underMenuArea">
+            <button id="track" class="underButton pointer font floatLeft ">Track</button>
+            <button id="lyrics" class="underButton pointer font floatLeft">Lyrics</button>
+                
+            <div id="underMenu" class="underMenu">
+            </div>
+        </section>
+        <div id="underMenuBackground" class="underMenuBackground pointer">
+            <i class="xi-caret-down xi-3x"></i>
+        </div>
+
+    </main>
+    
+    <script src="MusicList.json" type="text/javascript"></script>
+	<script src="musicPlayer.js"></script>
+</body>
+
+</html>
