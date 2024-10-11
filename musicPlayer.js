@@ -51,14 +51,14 @@ class DoublyLinkedList {
 		}
 	}
 	returnShuffleNode(node) { // random 값 만큼 순환 후 node 반환
-		const randomIndex = Math.floor(Math.random() * (this.size - 1) ) + 1;
-		
+		const randomIndex = Math.floor(Math.random() * (this.size - 1)) + 1;
+
 		console.log(randomIndex);
-		for (let i = 0; i < randomIndex ; i++) {
+		for (let i = 0; i < randomIndex; i++) {
 			//console.log( node.next );
 			node = node.next === null ? this.head : node.next;
 		}
-		console.log( node );
+		console.log(node);
 		return node;
 	}
 	printNodes(node) {
@@ -99,21 +99,20 @@ class Music {
 		return this._prev;
 	}
 
-	setMusicInformation(musicJson) {
-		this.title = musicJson["title"];
-		this.singer = musicJson["singer"];
-		this.cover = `${musicJson["cover"]}`;
-		this.audio = `${musicJson["audio"]}`;
-		this.lyrics = `${musicJson["lyrics"]}`;
+	setMusicInformation(musicData) {
+		this.title = musicData["title"];
+		this.singer = musicData["singer"];
+		this.cover = `${musicData["cover"]}`;
+		this.audio = `${musicData["audio"]}`;
+		this.lyrics = `${musicData["lyrics"]}`;
 	}
 }
 
 class MusicPlayer {
-	constructor(MusicJson) {
+	constructor(id) {
+		this.id = id; // 식별자
 		// setting music data
-		this.musicJson = MusicJson; // json file
 		this.musicList = null; // doubly linked list
-
 		//
 		this.currentMusic = null; // Music
 		this.currentMusicDuration = 0;
@@ -149,19 +148,23 @@ class MusicPlayer {
 		this.colorChoicer = document.getElementById("colorChoicer");
 	}
 
-	setMusicList() {
+	setMusicList(musicData) { /////////////////////////////////////////////////////////////수정 필요
 		//console.log( this.musicJson );
 		this.musicList = new DoublyLinkedList();
-		for (const key in this.musicJson) {
-			const musicInfo = this.musicJson[key];
-			const music = new Music(key);
-			music.setMusicInformation(musicInfo);
+		// for (const key in this.musicJson) { // 폐기
+		// 	const musicInfo = this.musicJson[key];
+		// 	const music = new Music(key);
+		// 	music.setMusicInformation(musicInfo);
 
-			//console.log( music.title );
+		// 	//console.log( music.title );
+		// 	this.musicList.append(music);
+		// }
+		musicData.forEach(data => {
+			const music = new Music(data.id);
+			music.setMusicInformation(data)
+
 			this.musicList.append(music);
-
-
-		}
+		});
 		//console.log( this.musicList.tail );
 		this.currentMusic = this.musicList.head;
 
@@ -191,8 +194,8 @@ class MusicPlayer {
 
 		this.songControl.addEventListener("input", () => {
 			console.log(this.songControl.value);
-			if ( this.songControl.value >= 100 ) {
-				this.songControl.value = ( this.songControl.value * ( this.song.duration - 1)) / 100
+			if (this.songControl.value >= 100) {
+				this.songControl.value = (this.songControl.value * (this.song.duration - 1)) / 100
 			} else {
 				this.song.currentTime = (this.songControl.value * this.song.duration) / 100;
 			}
@@ -224,17 +227,17 @@ class MusicPlayer {
 		});
 
 		this.colorChoicer.addEventListener("input", () => {
-			console.log( this.colorChoicer.value )
+			console.log(this.colorChoicer.value)
 			const neumorphism = document.querySelectorAll(".neumorphism");
 			const smallNeumorphism = document.querySelectorAll(".smallNeumorphism");
 			const pressedNeumorphism = document.querySelectorAll(".pressedNeumorphism");
 			const songControlB = document.querySelector(".songControl");
 			songControlB.style.backgroundColor = `${this.colorChoicer.value}`;
-			smallNeumorphism.forEach( (v) => {
+			smallNeumorphism.forEach((v) => {
 				v.style.boxShadow = `5px 5px 10px ${this.colorChoicer.value}, -5px -5px 10px #ffffff`;
 			});
-			console.log( neumorphism );
-			neumorphism.forEach( (v) => {
+			console.log(neumorphism);
+			neumorphism.forEach((v) => {
 				v.style.boxShadow = `7px 7px 10px ${this.colorChoicer.value}, -7px -7px 10px #ffffff`;
 			});
 			pressedNeumorphism.forEach((v) => {
@@ -247,10 +250,10 @@ class MusicPlayer {
 		this.playToggle.addEventListener("click", () => {
 			this.isPlaying = !this.isPlaying;
 			if (this.isPlaying === true) {
-				this.playToggle.classList.replace( "smallNeumorphism", "pressedNeumorphism" );
+				this.playToggle.classList.replace("smallNeumorphism", "pressedNeumorphism");
 				this.song.play();
 			} else {
-				this.playToggle.classList.replace( "pressedNeumorphism", "smallNeumorphism" );
+				this.playToggle.classList.replace("pressedNeumorphism", "smallNeumorphism");
 				this.song.pause();
 			}
 			//console.log( this.song.duration )
@@ -278,12 +281,12 @@ class MusicPlayer {
 			this.isShuffle = !this.isShuffle;
 			this.isRepeating = false;
 
-			if ( this.isShuffle === true ) {
-				this.shuffleButton.classList.replace( "smallNeumorphism", "pressedNeumorphism" );
-				this.repeatButton.classList.replace( "pressedNeumorphism", "smallNeumorphism" );
+			if (this.isShuffle === true) {
+				this.shuffleButton.classList.replace("smallNeumorphism", "pressedNeumorphism");
+				this.repeatButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
 				this.repeatButton.innerHTML = `<i class="${this.isRepeating ? "xi-repeat-one" : "xi-repeat"} xi-2x toggleIcon"></i>`
 			} else {
-				this.shuffleButton.classList.replace( "pressedNeumorphism", "smallNeumorphism" );
+				this.shuffleButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
 			}
 		});
 
@@ -291,11 +294,11 @@ class MusicPlayer {
 			this.isRepeating = !this.isRepeating;
 			this.isShuffle = false;
 
-			if ( this.isRepeating === true ) {
-				this.repeatButton.classList.replace( "smallNeumorphism", "pressedNeumorphism" );
-				this.shuffleButton.classList.replace( "pressedNeumorphism", "smallNeumorphism" );
+			if (this.isRepeating === true) {
+				this.repeatButton.classList.replace("smallNeumorphism", "pressedNeumorphism");
+				this.shuffleButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
 			} else {
-				this.repeatButton.classList.replace( "pressedNeumorphism", "smallNeumorphism" );
+				this.repeatButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
 			}
 			this.repeatButton.innerHTML = `<i class="${this.isRepeating ? "xi-repeat-one" : "xi-repeat"} xi-2x toggleIcon"></i>`
 		});
@@ -306,7 +309,7 @@ class MusicPlayer {
 			this.underMenuBackground.style.display = "block";
 			this.underMenuArea.style.transform = "translateY( calc( -100% + 3.5rem ) )";
 			this.showTrack();
-			
+
 		});
 
 		this.lyricsButton.addEventListener("click", () => {
@@ -323,7 +326,7 @@ class MusicPlayer {
 		});
 	}
 
-	clickKeyboards() {} // 키보드 이벤트
+	clickKeyboards() { } // 키보드 이벤트
 
 	getNextSong() { // 다음 곡 불러오기
 		this.currentMusic = this.currentMusic === this.musicList.tail ? this.musicList.head : this.currentMusic.next;
@@ -371,11 +374,11 @@ class MusicPlayer {
 		<div id="dummy" class="songList" style="height: 5rem;"></div>
 		`;
 		for (let i = 0; i < this.musicList.size; i++) {
-			document.getElementById(`songList${i}`).addEventListener("click", ()=>{
-				this.currentMusic = this.musicList.returnNodeFromIndex( i );
+			document.getElementById(`songList${i}`).addEventListener("click", () => {
+				this.currentMusic = this.musicList.returnNodeFromIndex(i);
 				this.setInterface();
 
-				if ( this.isPlaying === true ) {
+				if (this.isPlaying === true) {
 					this.song.play();
 				}
 			});
@@ -390,17 +393,30 @@ class MusicPlayer {
 		`;
 	}
 
-	readyForStart() {
-		this.setMusicList(); // 노래 데이터 세팅
+	readyForStart(musicData) {
+		this.setMusicList(musicData); // 노래 데이터 세팅
 		this.setInterface(); // 화면 표시
 		this.controlSong(); // 노래 재생
 		this.clickButtons(); // 이전 / 다음 / 시작 버튼 기능 세팅
 	}
 }
 
-const main = (() => {
-	console.log("Page is ready");
+const startMusicPlayer = (async () => {
+	const settings = {
+		method: "POST",
+		headers: {
+			"Accept": 'application/json',
+			"Content-Type": 'application/json',
+		}
+	};
+	try {
+		const response = await fetch("/musicData", settings);
+		const musicData = await response.json();
 
-	const musicPlayer = new MusicPlayer(JSON.parse(JSON.stringify(MusicJson)));
-	musicPlayer.readyForStart();
+		console.log(musicData);
+		const musicPlayer = new MusicPlayer("main");
+		musicPlayer.readyForStart(musicData);
+	} catch (err) {
+		console.error(err);
+	}
 })();
