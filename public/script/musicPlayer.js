@@ -113,6 +113,10 @@ class MusicPlayer {
 		this.id = id; // 식별자
 		// setting music data
 		this.musicList = null; // doubly linked list
+<<<<<<< HEAD:public/script/musicPlayer.js
+=======
+		//
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 		this.currentMusic = null; // Music
 		this.isShuffle = false; // 셔플 중인가
 		this.isPlaying = false; // 노래가 재생 중이면 True 아니면 False
@@ -127,8 +131,22 @@ class MusicPlayer {
 		this.audioContext = null; // for Equalizer
 	}
 
+<<<<<<< HEAD:public/script/musicPlayer.js
 	setMusicList(musicData) {
 		this.musicList = new DoublyLinkedList();
+=======
+	setMusicList(musicData) { /////////////////////////////////////////////////////////////수정 필요
+		//console.log( this.musicJson );
+		this.musicList = new DoublyLinkedList();
+		// for (const key in this.musicJson) { // 폐기
+		// 	const musicInfo = this.musicJson[key];
+		// 	const music = new Music(key);
+		// 	music.setMusicInformation(musicInfo);
+
+		// 	//console.log( music.title );
+		// 	this.musicList.append(music);
+		// }
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 		musicData.forEach(data => {
 			const music = new Music(data.id);
 			music.setMusicInformation(data)
@@ -207,12 +225,18 @@ class MusicPlayer {
 			}
 		});
 
+<<<<<<< HEAD:public/script/musicPlayer.js
 		colorChoicer.addEventListener("input", () => { // easter egg
 			console.log(colorChoicer.value)
+=======
+		this.colorChoicer.addEventListener("input", () => {
+			console.log(this.colorChoicer.value)
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 			const neumorphism = document.querySelectorAll(".neumorphism");
 			const smallNeumorphism = document.querySelectorAll(".smallNeumorphism");
 			const pressedNeumorphism = document.querySelectorAll(".pressedNeumorphism");
 			const songControlB = document.querySelector(".songControl");
+<<<<<<< HEAD:public/script/musicPlayer.js
 			songControlB.style.backgroundColor = `${colorChoicer.value}`;
 			smallNeumorphism.forEach((v) => {
 				v.style.boxShadow = `5px 5px 10px ${colorChoicer.value}, -5px -5px 10px #ffffff`;
@@ -220,6 +244,15 @@ class MusicPlayer {
 			console.log(neumorphism);
 			neumorphism.forEach((v) => {
 				v.style.boxShadow = `7px 7px 10px ${colorChoicer.value}, -7px -7px 10px #ffffff`;
+=======
+			songControlB.style.backgroundColor = `${this.colorChoicer.value}`;
+			smallNeumorphism.forEach((v) => {
+				v.style.boxShadow = `5px 5px 10px ${this.colorChoicer.value}, -5px -5px 10px #ffffff`;
+			});
+			console.log(neumorphism);
+			neumorphism.forEach((v) => {
+				v.style.boxShadow = `7px 7px 10px ${this.colorChoicer.value}, -7px -7px 10px #ffffff`;
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 			});
 			pressedNeumorphism.forEach((v) => {
 				v.style.boxShadow = `inset 3px 3px 5px ${colorChoicer.value}, inset -3px -3px 5px #ffffff`;
@@ -238,9 +271,15 @@ class MusicPlayer {
 		const repeatButton = document.getElementById("repeat");
 
 		this.playToggle.addEventListener("click", () => {
+<<<<<<< HEAD:public/script/musicPlayer.js
 			if (this.isPlaying === false) {
 				this.playToggle.classList.replace("smallNeumorphism", "pressedNeumorphism");
 				if ( this.audioContext === null ) this.musicEqualizer();
+=======
+			this.isPlaying = !this.isPlaying;
+			if (this.isPlaying === true) {
+				this.playToggle.classList.replace("smallNeumorphism", "pressedNeumorphism");
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 				this.song.play();
 			} else {
 				this.playToggle.classList.replace("pressedNeumorphism", "smallNeumorphism");
@@ -272,11 +311,19 @@ class MusicPlayer {
 			this.isRepeating = false;
 
 			if (this.isShuffle === true) {
+<<<<<<< HEAD:public/script/musicPlayer.js
 				shuffleButton.classList.replace("smallNeumorphism", "pressedNeumorphism");
 				repeatButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
 				repeatButton.innerHTML = `<i class="${this.isRepeating ? "xi-repeat-one" : "xi-repeat"} xi-2x toggleIcon"></i>`
 			} else {
 				shuffleButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
+=======
+				this.shuffleButton.classList.replace("smallNeumorphism", "pressedNeumorphism");
+				this.repeatButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
+				this.repeatButton.innerHTML = `<i class="${this.isRepeating ? "xi-repeat-one" : "xi-repeat"} xi-2x toggleIcon"></i>`
+			} else {
+				this.shuffleButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 			}
 		});
 
@@ -285,10 +332,17 @@ class MusicPlayer {
 			this.isShuffle = false;
 
 			if (this.isRepeating === true) {
+<<<<<<< HEAD:public/script/musicPlayer.js
 				repeatButton.classList.replace("smallNeumorphism", "pressedNeumorphism");
 				shuffleButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
 			} else {
 				repeatButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
+=======
+				this.repeatButton.classList.replace("smallNeumorphism", "pressedNeumorphism");
+				this.shuffleButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
+			} else {
+				this.repeatButton.classList.replace("pressedNeumorphism", "smallNeumorphism");
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 			}
 			repeatButton.innerHTML = `<i class="${this.isRepeating ? "xi-repeat-one" : "xi-repeat"} xi-2x toggleIcon"></i>`
 		});
@@ -302,6 +356,10 @@ class MusicPlayer {
 			underMenuArea.style.transform = "translateY( calc( -100% + 3.5rem ) )";
 			equalizerArea.style.bottom = "80%"; // equalizer도 같이 올라오게
 			this.showTrack();
+<<<<<<< HEAD:public/script/musicPlayer.js
+=======
+
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 		});
 
 		lyricsButton.addEventListener("click", () => {
@@ -387,6 +445,7 @@ class MusicPlayer {
 		`;
 	}
 
+<<<<<<< HEAD:public/script/musicPlayer.js
 	musicEqualizer() {
 		const equalizerArea = document.getElementById("equalizer");
 		const numberOfBar = 50;
@@ -440,6 +499,8 @@ class MusicPlayer {
 	}
 
 
+=======
+>>>>>>> dcea2c938b4f98360754a1a1ac46b6f10c736078:musicPlayer.js
 	readyForStart(musicData) {
 		this.setMusicList(musicData); // 노래 데이터 세팅
 		this.setInterface(); // 화면 표시
