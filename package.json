@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "express": "^4.21.1",
+    "mysql": "^2.18.1",
+    "supervisor": "^0.12.0"
+  },
+  "name": "musicplayer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "musicPlayer.js",
+  "scripts": {
+    "start": "supervisor ./src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

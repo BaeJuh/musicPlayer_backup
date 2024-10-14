@@ -7,7 +7,7 @@
     -moz-transition: .5s;
     -ms-transition: .5s;
 
-    color: #000000;
+    color: #3D0000;
 
     /* test*/
 }
@@ -35,10 +35,11 @@ body {
 
 .playerArea {
     position: absolute;
-    width: 50rem;
+    width: 50rem; /* 500px */
     height: 90%;
-    max-height: 90rem;
-    top: calc( 50% - 45rem );
+    max-height: 85rem;
+    min-height: 85rem;
+    top: calc( 50% - 42.5rem );
     left: calc(50% - 250px);
     border-radius: 10rem;
     overflow: hidden;
@@ -174,6 +175,25 @@ body {
         border: none;
 
         padding: .5rem;
+    }
+
+.equalizerArea {
+    width: 100%;
+    height: 7rem;
+    text-align: center;
+
+    position: absolute;
+    bottom: 3.5rem;
+    left: 0;
+    right: 0;
+}
+    .equalizerBar {
+        display: inline-block;
+        background: #b60000;
+        margin: 0 1px;
+        width: 8px;
+        height: 100%; /* 기본 높이 설정 */
+        transform-origin: bottom;
     }
 
 .underMenuArea {
