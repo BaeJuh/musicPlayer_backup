@@ -97,6 +97,23 @@ body {
         .singer {
             font-size: 2rem;
         }
+        .setBookmark {
+            position: absolute;
+            top:.7rem;
+            right:.5rem;
+            width: 6rem;
+            height: 6rem;
+            font-size: 5rem;
+        }
+            .setBookmark i {
+                color: #D91656;
+                text-align: center;
+                line-height: 6rem;
+                cursor: pointer;
+            }
+            .setBookmark i:hover {
+                color: #b5003c;
+            }
     
     .controlArea {
         margin: auto;
@@ -222,11 +239,11 @@ body {
     box-shadow: 0 -1rem 2rem #fdfdfd;
 }
     .underButton {
-        width: 50%;
+        width: 33%;
         height: 7rem;
         padding-bottom: 1rem;
 
-        font-size: 3rem;
+        font-size: 2.5rem;
 
         background-color: transparent;
         border: none;
@@ -256,6 +273,11 @@ body {
         padding-top: 2rem;
         text-align: center;
     }
+        .underMenuBackground i {
+            color: #D91656;
+            font-size: 5rem;
+        }
+
     .songList {
         /* background-color: rgba(128, 128, 128, 0.5); */
         padding: 1rem 0 1rem 0;
@@ -272,8 +294,22 @@ body {
         .songListPara{
             margin-left: 1rem;
             font-size: 2rem;
-            
         }
+        .songListPlay {
+            background-color: rgba( 0 , 0, 0, 0.15);
+        }
+        .bookmark {
+            margin-left: auto;
+            padding-top: .3rem;
+            width: 4.5rem;
+            height: 4.5rem;
+            font-size: 3.5rem;
+        }
+            .bookmark i {
+                color: #D91656;
+                text-align: center;
+                line-height: 4.5rem;
+            }
     .underLyrics {
         padding: 0 2rem 0 2rem;
         
@@ -286,7 +322,6 @@ body {
         -webkit-appearance: none;
                 appearance: none;
     }
-
 
 .neumorphism {
     background: -o-linear-gradient(305deg, #f3f3f3, #cccccc);

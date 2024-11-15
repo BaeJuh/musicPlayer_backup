@@ -82,6 +82,7 @@ class Music {
 		this.cover = ""; // URL
 		this.audio = "";
 		this.lyrics = "";
+		this.bookmark = null;
 
 		this._next = null;
 		this._prev = null;
@@ -105,6 +106,7 @@ class Music {
 		this.cover = `${musicData["cover"]}`;
 		this.audio = `${musicData["audio"]}`;
 		this.lyrics = `${musicData["lyrics"]}`;
+		this.bookmark = musicData["bookmark"];
 	}
 }
 
@@ -158,6 +160,7 @@ class MusicPlayer {
 		this.playToggle.innerHTML = `<i class="${this.isPlaying ? "xi-pause" : "xi-play"} xi-5x toggleIcon"></i>`
 
 		this.showTrack();
+		this.showLike();
 	}
 
 	controlSong() { // Music Control
@@ -232,6 +235,7 @@ class MusicPlayer {
 		const prevButton = document.getElementById("prev");
 		const trackButton = document.getElementById("track");
 		const lyricsButton = document.getElementById("lyrics");
+		const favoritesButton = document.getElementById("seeOnlyLike");
 		const shuffleButton = document.getElementById("shuffle");
 		const underMenuArea = document.getElementById("underMenuArea");
 		const underMenuBackground = document.getElementById("underMenuBackground");
@@ -240,7 +244,7 @@ class MusicPlayer {
 		this.playToggle.addEventListener("click", () => {
 			if (this.isPlaying === false) {
 				this.playToggle.classList.replace("smallNeumorphism", "pressedNeumorphism");
-				if ( this.audioContext === null ) this.musicEqualizer();
+				if (this.audioContext === null) this.musicEqualizer();
 				this.song.play();
 			} else {
 				this.playToggle.classList.replace("pressedNeumorphism", "smallNeumorphism");
@@ -295,13 +299,29 @@ class MusicPlayer {
 
 		let isUnderMenuOn = false;
 		const equalizerArea = document.getElementById("equalizer");
-		trackButton.addEventListener("click", () => {
+		trackButton.addEventListener("click", async () => {
 			isUnderMenuOn = true;
 
 			underMenuBackground.style.display = "block";
 			underMenuArea.style.transform = "translateY( calc( -100% + 7rem ) )";
 			equalizerArea.style.bottom = "80.5%"; // equalizer도 같이 올라오게
-			this.showTrack();
+			const settings = {
+				method: "POST",
+				headers: {
+					"Accept": 'application/json',
+					"Content-Type": 'application/json',
+				}
+			};
+			try {
+				const response = await fetch("/musicData", settings);
+				const musicData = await response.json();
+
+				console.log(musicData)
+				this.setMusicList(musicData);
+				this.showTrack();
+			} catch (err) {
+				console.error(err);
+			}
 		});
 
 		lyricsButton.addEventListener("click", () => {
@@ -312,6 +332,32 @@ class MusicPlayer {
 			equalizerArea.style.bottom = "80.5%"; // equalizer도 같이 올라오게
 			this.showLyrics();
 		});
+
+		favoritesButton.addEventListener("click", async () => {
+			isUnderMenuOn = true;
+
+			underMenuBackground.style.display = "block";
+			underMenuArea.style.transform = "translateY( calc( -100% + 7rem ) )";
+			equalizerArea.style.bottom = "80.5%"; // equalizer도 같이 올라오게
+			const settings = {
+				method: "POST",
+				headers: {
+					"Accept": 'application/json',
+					"Content-Type": 'application/json',
+				}
+			};
+			try {
+				const response = await fetch("/likeMusic", settings);
+				const musicData = await response.json();
+
+				console.log(musicData)
+				this.setMusicList(musicData);
+				this.showTrack();
+			} catch (err) {
+				console.error(err);
+			}
+		});
+
 		underMenuBackground.addEventListener("click", () => {
 			underMenuArea.style.transform = "translateY( 0 )";
 			underMenuBackground.style.display = "none";
@@ -352,20 +398,22 @@ class MusicPlayer {
 		this.underMenu.innerHTML = "";
 		for (let i = 0; i < this.musicList.size; i++) {
 			const music = this.musicList.returnNodeFromIndex(i);
-			this.underMenu.innerHTML += music === this.currentMusic ? `
-				<div id="songList${i}" class="songList pointer" style="background-color: rgba( 0 , 0, 0, 0.15);">
-					<img src="${music.cover}" />
-					<p class="songListPara">${music.title}<br>${music.singer}</p>
-				</div>
-			` : `
+			this.underMenu.innerHTML += `
 				<div id="songList${i}" class="songList pointer">
 					<img src="${music.cover}" />
-					<p class="songListPara">${music.title}<br>${music.singer}</p>
+					<p class="songListPara">${music.title}<br>${music.singer}</p> 
+					${music["bookmark"] === 1 ? `<span id="${i}_bookmarker" class="bookmark"><i class="xi-heart"></i></span>` : ""}
 				</div>
-			`;
+			`; // 하트 보이기
+			if (music === this.currentMusic) {
+				document.getElementById(`songList${i}`).classList.add("songListPlay");
+			}
+			// if (musicList[i]["bookmark"] === 1) {
+			// 	document.getElementById(`${i}_bookmarker`).innerHTML = `<i class="xi-star"></i>`;
+			// }
 		}
 		this.underMenu.innerHTML += `
-		<div id="dummy" class="songList" style="height: 5rem;"></div>
+			<div id="dummy" class="songList" style="height: 5rem;"></div>
 		`;
 		for (let i = 0; i < this.musicList.size; i++) {
 			document.getElementById(`songList${i}`).addEventListener("click", () => {
@@ -377,6 +425,11 @@ class MusicPlayer {
 				}
 			});
 		}
+	}
+
+	showLike() {
+		setBookmark.innerHTML = this.currentMusic["bookmark"] === 1 ?
+			`<i class="xi-heart"></i>` : `<i class="xi-heart-o"></i>`;
 	}
 
 	showLyrics() {
@@ -398,17 +451,16 @@ class MusicPlayer {
 		// 오디오 소스 연결
 		musicSource.connect(analyzer);
 		musicSource.connect(this.audioContext.destination);
-		
+
 		const frequencyData = new Uint8Array(analyzer.frequencyBinCount);
 		// 막대 생성
 		const musicPlayerWidth = document.getElementById("playerArea").offsetWidth; // width 일단 구해
-		console.log(musicPlayerWidth/numberOfBar)
 		function createBars() {
 			for (let i = 0; i < numberOfBar; i++) {
 				const bar = document.createElement("div");
 				bar.id = `bar${i}`;
 				bar.classList.add("equalizerBar");
-				bar.style.width = `${musicPlayerWidth/numberOfBar - 2}px`; // -2는 margin 때문임
+				bar.style.width = `${musicPlayerWidth / numberOfBar - 2}px`; // -2는 margin 때문임
 				equalizerArea.appendChild(bar);
 			}
 		}
@@ -420,10 +472,10 @@ class MusicPlayer {
 			for (let i = 0; i < numberOfBar; i++) {
 				const bar = document.getElementById(`bar${i}`);
 				if (bar) {
-					const index = (i+5)*2;
+					const index = (i + 5) * 2;
 					const fd = frequencyData[index];
 
-					const scaleY = Math.max(0, (fd || 0)**2 / 60000);
+					const scaleY = Math.max(0, (fd || 0) ** 2 / 60000);
 					//const scaleY = Math.max(0, (fd || 0) / 300);
 					// bar.style.backgroundColor = `rgb(${(fd+255)/2}, 0, 0)`;
 					// bar.style.backgroundColor = `rgb(${Math.min(fd, 255)}, ${Math.min(fd, 255)}, ${Math.min(fd, 255)})`;
@@ -444,31 +496,115 @@ class MusicPlayer {
 		renderFrame();
 	}
 
+	reloadForLike(musicData, currentMusic) {
+		this.setMusicList(musicData); // 노래 데이터 세팅
+		this.currentMusic = currentMusic;
+		// this.showTrack();
+	}
+
+	AllOrFavorites() {
+		document.getElementById("seeOnlyLike").addEventListener("click", async () => {
+			const settings = {
+				method: "POST",
+				headers: {
+					"Accept": 'application/json',
+					"Content-Type": 'application/json',
+				}
+			};
+			try {
+				const response = await fetch("/likeMusic", settings);
+				const musicData = await response.json();
+
+				console.log(musicData)
+				this.setMusicList(musicData);
+				this.showTrack();
+			} catch (err) {
+				console.error(err);
+			}
+		});
+		document.getElementById("track").addEventListener("click", async () => {
+			const settings = {
+				method: "POST",
+				headers: {
+					"Accept": 'application/json',
+					"Content-Type": 'application/json',
+				}
+			};
+			try {
+				const response = await fetch("/likeMusic", settings);
+				const musicData = await response.json();
+
+				console.log(musicData)
+				this.setMusicList(musicData);
+				this.showTrack();
+			} catch (err) {
+				console.error(err);
+			}
+		});
+	}
+
+	updateBookmark() {
+		const setBookmark = document.getElementById("setBookmark");
+		setBookmark.addEventListener("click", async (e) => {
+			const settings = {
+				method: "POST",
+				headers: {
+					"Accept": 'application/json',
+					"Content-Type": 'application/json',
+				}, body: JSON.stringify({
+					id: this.currentMusic["id"],
+					bookmark: this.currentMusic["bookmark"]
+				})
+			};
+			try {
+				const response = await fetch("/bookmarkUpdate", settings);
+				const musicData = await response.json();
+
+				const beforeLikeMusic = this.currentMusic; // 좋아요 누르기 전 현재 목록
+				this.setMusicList(musicData);
+
+				this.currentMusic = beforeLikeMusic;
+				this.currentMusic["bookmark"] = beforeLikeMusic["bookmark"] === 1 ? null : 1;
+				this.showLike();
+
+				// setBookmark.innerHTML = this.currentMusic["bookmark"] === 1 ? `<i class="xi-heart"></i>` : `<i class="xi-heart-o"></i>`;
+			} catch (err) {
+				console.error(err);
+			}
+		});
+	}
 
 	readyForStart(musicData) {
 		this.setMusicList(musicData); // 노래 데이터 세팅
 		this.setInterface(); // 화면 표시
 		this.controlSong(); // 노래 재생
 		this.clickButtons(); // 이전 / 다음 / 시작 버튼 기능 세팅
+		this.updateBookmark(); // 북마크
+		// this.AllOrFavorites();
+	}
+
+	async startAllMusicPlayer(/* musicData */) {
+		const settings = {
+			method: "POST",
+			headers: {
+				"Accept": 'application/json',
+				"Content-Type": 'application/json',
+			}
+		};
+		try {
+			const response = await fetch("/musicData", settings);
+			const musicData = await response.json();
+
+			console.log(musicData);
+			// const musicPlayer = new MusicPlayer("main");
+			this.readyForStart(musicData);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 }
 
-const startMusicPlayer = (async () => {
-	const settings = {
-		method: "POST",
-		headers: {
-			"Accept": 'application/json',
-			"Content-Type": 'application/json',
-		}
-	};
-	try {
-		const response = await fetch("/musicData", settings);
-		const musicData = await response.json();
-
-		console.log(musicData);
-		const musicPlayer = new MusicPlayer("main");
-		musicPlayer.readyForStart(musicData);
-	} catch (err) {
-		console.error(err);
-	}
-})();
+window.onload = () => {
+	const musicPlayer = new MusicPlayer("main");
+	musicPlayer.startAllMusicPlayer();
+}
