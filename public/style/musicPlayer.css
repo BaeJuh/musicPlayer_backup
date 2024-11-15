@@ -278,7 +278,7 @@ body {
             font-size: 5rem;
 
             /* box-shadow: #b5003c; */
-            text-shadow: .3rem .3rem 1rem #b5003c;
+            text-shadow: .3rem .2rem .5rem #b5003c;
         }
 
     .songList {
