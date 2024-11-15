@@ -298,6 +298,7 @@ class MusicPlayer {
 		});
 
 		let isUnderMenuOn = false;
+		let isAll = true;
 		const equalizerArea = document.getElementById("equalizer");
 		trackButton.addEventListener("click", async () => {
 			isUnderMenuOn = true;
@@ -312,16 +313,26 @@ class MusicPlayer {
 					"Content-Type": 'application/json',
 				}
 			};
-			try {
-				const response = await fetch("/musicData", settings);
-				const musicData = await response.json();
+			if (isAll !== true) {
+				try {
+					const response = await fetch("/musicData", settings);
+					const musicData = await response.json();
 
-				console.log(musicData)
-				this.setMusicList(musicData);
+					console.log(musicData)
+					const beforeCurrentMusic = this.currentMusic;
+					this.setMusicList(musicData);
+					this.currentMusic = beforeCurrentMusic;
+					this.showTrack();
+
+					isAll = true;
+				} catch (err) {
+					console.error(err);
+				}
+			} else if (isAll === true) {
 				this.showTrack();
-			} catch (err) {
-				console.error(err);
+				document.getElementById("underMenu").scrollTop = 50*this.currentMusic.id;
 			}
+
 		});
 
 		lyricsButton.addEventListener("click", () => {
@@ -330,7 +341,9 @@ class MusicPlayer {
 			underMenuBackground.style.display = "block";
 			underMenuArea.style.transform = "translateY( calc( -100% + 7rem ) )";
 			equalizerArea.style.bottom = "80.5%"; // equalizer도 같이 올라오게
+
 			this.showLyrics();
+			document.getElementById("underMenu").scrollTop = 0;
 		});
 
 		favoritesButton.addEventListener("click", async () => {
@@ -351,11 +364,16 @@ class MusicPlayer {
 				const musicData = await response.json();
 
 				console.log(musicData)
+				const beforeCurrentMusic = this.currentMusic;
 				this.setMusicList(musicData);
+				this.currentMusic = beforeCurrentMusic;
 				this.showTrack();
+
+				isAll = false;
 			} catch (err) {
 				console.error(err);
 			}
+
 		});
 
 		underMenuBackground.addEventListener("click", () => {
@@ -496,11 +514,11 @@ class MusicPlayer {
 		renderFrame();
 	}
 
-	reloadForLike(musicData, currentMusic) {
-		this.setMusicList(musicData); // 노래 데이터 세팅
-		this.currentMusic = currentMusic;
-		// this.showTrack();
-	}
+	// reloadForLike(musicData, currentMusic) {
+	// 	this.setMusicList(musicData); // 노래 데이터 세팅
+	// 	this.currentMusic = currentMusic;
+	// 	// this.showTrack();
+	// }
 
 	AllOrFavorites() {
 		document.getElementById("seeOnlyLike").addEventListener("click", async () => {

@@ -112,7 +112,7 @@ body {
                 cursor: pointer;
             }
             .setBookmark i:hover {
-                color: #b5003c;
+                color: #fd6c9c;
             }
     
     .controlArea {
@@ -276,6 +276,9 @@ body {
         .underMenuBackground i {
             color: #D91656;
             font-size: 5rem;
+
+            /* box-shadow: #b5003c; */
+            text-shadow: .3rem .3rem 1rem #b5003c;
         }
 
     .songList {
