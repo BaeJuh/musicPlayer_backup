@@ -299,8 +299,8 @@ class MusicPlayer {
 			isUnderMenuOn = true;
 
 			underMenuBackground.style.display = "block";
-			underMenuArea.style.transform = "translateY( calc( -100% + 3.5rem ) )";
-			equalizerArea.style.bottom = "80%"; // equalizer도 같이 올라오게
+			underMenuArea.style.transform = "translateY( calc( -100% + 7rem ) )";
+			equalizerArea.style.bottom = "80.5%"; // equalizer도 같이 올라오게
 			this.showTrack();
 		});
 
@@ -308,14 +308,14 @@ class MusicPlayer {
 			isUnderMenuOn = true;
 
 			underMenuBackground.style.display = "block";
-			underMenuArea.style.transform = "translateY( calc( -100% + 3.5rem ) )";
-			equalizerArea.style.bottom = "80%"; // equalizer도 같이 올라오게
+			underMenuArea.style.transform = "translateY( calc( -100% + 7rem ) )";
+			equalizerArea.style.bottom = "80.5%"; // equalizer도 같이 올라오게
 			this.showLyrics();
 		});
 		underMenuBackground.addEventListener("click", () => {
 			underMenuArea.style.transform = "translateY( 0 )";
 			underMenuBackground.style.display = "none";
-			equalizerArea.style.bottom = "3.5rem"; // equalizer도 같이 내려가게
+			equalizerArea.style.bottom = "7rem"; // equalizer도 같이 내려가게
 			isUnderMenuOn = false;
 		});
 	}
@@ -353,7 +353,7 @@ class MusicPlayer {
 		for (let i = 0; i < this.musicList.size; i++) {
 			const music = this.musicList.returnNodeFromIndex(i);
 			this.underMenu.innerHTML += music === this.currentMusic ? `
-				<div id="songList${i}" class="songList pointer" style="background-color: rgba( 255 , 0, 0, 0.3);">
+				<div id="songList${i}" class="songList pointer" style="background-color: rgba( 0 , 0, 0, 0.15);">
 					<img src="${music.cover}" />
 					<p class="songListPara">${music.title}<br>${music.singer}</p>
 				</div>
@@ -401,11 +401,14 @@ class MusicPlayer {
 		
 		const frequencyData = new Uint8Array(analyzer.frequencyBinCount);
 		// 막대 생성
+		const musicPlayerWidth = document.getElementById("playerArea").offsetWidth; // width 일단 구해
+		console.log(musicPlayerWidth/numberOfBar)
 		function createBars() {
 			for (let i = 0; i < numberOfBar; i++) {
 				const bar = document.createElement("div");
 				bar.id = `bar${i}`;
 				bar.classList.add("equalizerBar");
+				bar.style.width = `${musicPlayerWidth/numberOfBar - 2}px`; // -2는 margin 때문임
 				equalizerArea.appendChild(bar);
 			}
 		}
@@ -422,7 +425,9 @@ class MusicPlayer {
 
 					const scaleY = Math.max(0, (fd || 0)**2 / 60000);
 					//const scaleY = Math.max(0, (fd || 0) / 300);
-					bar.style.backgroundColor = `rgb(${(fd+255)/2}, 0, 0)`;
+					// bar.style.backgroundColor = `rgb(${(fd+255)/2}, 0, 0)`;
+					// bar.style.backgroundColor = `rgb(${Math.min(fd, 255)}, ${Math.min(fd, 255)}, ${Math.min(fd, 255)})`;
+					bar.style.backgroundColor = `rgb(${Math.min(fd / 2 + 30, 122)}, ${Math.min(fd / 1.5 + 50, 171)}, ${Math.min(fd / 1.7 + 45, 157)})`;
 					bar.style.transform = `scaleY(${scaleY})`;
 				} else {
 					continue;

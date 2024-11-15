@@ -7,7 +7,7 @@
     -moz-transition: .5s;
     -ms-transition: .5s;
 
-    color: #3D0000;
+    color: #404040;
 
     /* test*/
 }
@@ -30,23 +30,23 @@ body {
     font-family: "Radio Canada Big", sans-serif;
     font-weight: 600;
 
-    color: #000000;
+    /* color: #000000; */
 }
 
 .playerArea {
     position: absolute;
-    width: 50rem; /* 500px */
-    height: 90%;
+    width: 50rem;
+    /*500px*/height: 90%;
     max-height: 85rem;
     min-height: 85rem;
     top: calc( 50% - 42.5rem );
     left: calc(50% - 250px);
-    border-radius: 10rem;
+    border-radius: 4rem;
     overflow: hidden;
-    -webkit-border-radius: 10rem;
-    -moz-border-radius: 10rem;
-    -ms-border-radius: 10rem;
-    -o-border-radius: 10rem;
+    -webkit-border-radius: 4rem;
+    -moz-border-radius: 4rem;
+    -ms-border-radius: 4rem;
+    -o-border-radius: 4rem;
 }
     .upperMenuArea {
         position: absolute;
@@ -64,7 +64,7 @@ body {
 
     .coverArea {
         margin: auto;
-        margin-top: 4.5rem;
+        margin-top: 3rem;
         /*border: 1rem solid #e3e3e3;
         */width: 42rem;
         height: 42rem;
@@ -100,7 +100,7 @@ body {
     
     .controlArea {
         margin: auto;
-        margin-top: 4rem;
+        margin-top: 3rem;
 
         width: 90%;
         height: 5rem;
@@ -117,7 +117,7 @@ body {
             height: .5rem;
             border-radius: .5rem;
             
-            background-color: rgba( 153 , 0, 0, 0.5);
+            background-color: #9c9c9c;
         }
             .songControl::-webkit-slider-thumb {
                 -webkit-appearance: none;
@@ -126,8 +126,8 @@ body {
                 height: 2rem;
                 border-radius: 50%;
                 background: linear-gradient(145deg, #f3f3f3, #cccccc);
-                -webkit-box-shadow:  5px 5px 10px #990000, -5px -5px 10px #ffffff;
-                box-shadow:  5px 5px 10px #990000, -5px -5px 10px #ffffff;
+                -webkit-box-shadow:  5px 5px 10px #757575, -5px -5px 10px #ffffff;
+                box-shadow:  5px 5px 10px #757575, -5px -5px 10px #ffffff;
                 position: relative;
                 -webkit-transition: .5s;
                 transition: .5s;
@@ -169,6 +169,10 @@ body {
 
         padding: .5rem;
     }
+    .playToggle .xi-play {
+        position: relative;
+        left: .3rem;
+    }
 
     .buttonStyle {
         border-radius: 50%;
@@ -183,15 +187,17 @@ body {
     text-align: center;
 
     position: absolute;
-    bottom: 3.5rem;
+    bottom: 7rem;
     left: 0;
     right: 0;
+
+    pointer-events: none;
 }
     .equalizerBar {
         display: inline-block;
-        background: #b60000;
+        /* background: #ff3333; */
         margin: 0 1px;
-        width: 8px;
+        /* width: 8px; */
         height: 100%; /* 기본 높이 설정 */
         transform-origin: bottom;
     }
@@ -201,11 +207,11 @@ body {
     height: 80%;
 
     position: absolute;
-    top: calc( 100% - 3.5rem );
+    top: calc( 100% - 7rem );
 
     padding-top: .5rem;
 
-    background-color: rgba(238, 238, 238, 0.4);
+    background-color: rgba(238, 238, 238, 0.5);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
 
@@ -213,15 +219,14 @@ body {
 
     -webkit-box-shadow: 0 -1rem 2rem #fdfdfd;
 
-            box-shadow: 0 -1rem 2rem #fdfdfd;
-    
+    box-shadow: 0 -1rem 2rem #fdfdfd;
 }
     .underButton {
         width: 50%;
-        height: 4rem;
-        padding-bottom: 2rem;
+        height: 7rem;
+        padding-bottom: 1rem;
 
-        font-size: 2rem;
+        font-size: 3rem;
 
         background-color: transparent;
         border: none;
@@ -236,6 +241,8 @@ body {
         margin-top: 3.5rem;
 
         overflow: scroll;
+
+        
     }
     .underMenuBackground {
         position: absolute;
@@ -244,7 +251,7 @@ body {
         width: 100%;
         height: 100vh;
         display: none;
-        background-color: rgba(255, 255, 255, 0.4);
+        background-color: rgba(255, 255, 255, 0.3);
 
         padding-top: 2rem;
         text-align: center;
@@ -284,21 +291,21 @@ body {
 .neumorphism {
     background: -o-linear-gradient(305deg, #f3f3f3, #cccccc);
     background: linear-gradient(145deg, #f3f3f3, #cccccc);
-    -webkit-box-shadow:  7px 7px 10px #990000, -7px -7px 10px #ffffff;
-            box-shadow:  7px 7px 10px #990000, -7px -7px 10px #ffffff;
+    -webkit-box-shadow:  7px 7px 10px #757575, -7px -7px 10px #ffffff;
+            box-shadow:  7px 7px 10px #757575, -7px -7px 10px #ffffff;
 }
 
 .smallNeumorphism {
     background: -o-linear-gradient(305deg, #f3f3f3, #cccccc);
     background: linear-gradient(145deg, #f3f3f3, #cccccc);
-    -webkit-box-shadow:  5px 5px 10px #990000, -5px -5px 10px #ffffff;
-            box-shadow:  5px 5px 10px #990000, -5px -5px 10px #ffffff;
+    -webkit-box-shadow:  5px 5px 10px #757575, -5px -5px 10px #ffffff;
+            box-shadow:  5px 5px 10px #757575, -5px -5px 10px #ffffff;
 }
 
 .pressedNeumorphism {
     background: #e3e3e3;
-    -webkit-box-shadow: inset 3px 3px 5px #990000, inset -3px -3px 5px #ffffff;
-            box-shadow: inset 3px 3px 5px #990000, inset -3px -3px 5px #ffffff;
+    -webkit-box-shadow: inset 3px 3px 5px #757575, inset -3px -3px 5px #ffffff;
+            box-shadow: inset 3px 3px 5px #757575, inset -3px -3px 5px #ffffff;
 }
 
 
