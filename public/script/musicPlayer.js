@@ -159,7 +159,7 @@ class MusicPlayer {
 		this.songControl.value = 0;
 		this.playToggle.innerHTML = `<i class="${this.isPlaying ? "xi-pause" : "xi-play"} xi-5x toggleIcon"></i>`
 
-		this.showTrack();
+		// this.showTrack();
 		this.showLike();
 	}
 
@@ -387,7 +387,7 @@ class MusicPlayer {
 	clickKeyboards() { } // 키보드 이벤트
 
 	getNextSong() { // 다음 곡 불러오기
-		this.currentMusic = this.currentMusic === this.musicList.tail ? this.musicList.head : this.currentMusic.next;
+		this.currentMusic = (this.currentMusic === this.musicList.tail) || (this.currentMusic.next === null) ? this.musicList.head : this.currentMusic.next;
 
 		this.setInterface();
 		if (this.isPlaying === true) {
@@ -396,7 +396,7 @@ class MusicPlayer {
 	}
 
 	getPrevSong() { // 이전 곡 불러오기
-		this.currentMusic = this.currentMusic === this.musicList.head ? this.musicList.tail : this.currentMusic.prev;
+		this.currentMusic = this.currentMusic === this.musicList.head || (this.currentMusic.prev === null)? this.musicList.tail : this.currentMusic.prev;
 		//this.isPlaying = false;
 		this.setInterface();
 		if (this.isPlaying === true) {
@@ -426,9 +426,6 @@ class MusicPlayer {
 			if (music === this.currentMusic) {
 				document.getElementById(`songList${i}`).classList.add("songListPlay");
 			}
-			// if (musicList[i]["bookmark"] === 1) {
-			// 	document.getElementById(`${i}_bookmarker`).innerHTML = `<i class="xi-star"></i>`;
-			// }
 		}
 		this.underMenu.innerHTML += `
 			<div id="dummy" class="songList" style="height: 5rem;"></div>
@@ -514,12 +511,6 @@ class MusicPlayer {
 		renderFrame();
 	}
 
-	// reloadForLike(musicData, currentMusic) {
-	// 	this.setMusicList(musicData); // 노래 데이터 세팅
-	// 	this.currentMusic = currentMusic;
-	// 	// this.showTrack();
-	// }
-
 	AllOrFavorites() {
 		document.getElementById("seeOnlyLike").addEventListener("click", async () => {
 			const settings = {
@@ -584,8 +575,6 @@ class MusicPlayer {
 				this.currentMusic = beforeLikeMusic;
 				this.currentMusic["bookmark"] = beforeLikeMusic["bookmark"] === 1 ? null : 1;
 				this.showLike();
-
-				// setBookmark.innerHTML = this.currentMusic["bookmark"] === 1 ? `<i class="xi-heart"></i>` : `<i class="xi-heart-o"></i>`;
 			} catch (err) {
 				console.error(err);
 			}
@@ -598,7 +587,6 @@ class MusicPlayer {
 		this.controlSong(); // 노래 재생
 		this.clickButtons(); // 이전 / 다음 / 시작 버튼 기능 세팅
 		this.updateBookmark(); // 북마크
-		// this.AllOrFavorites();
 	}
 
 	async startAllMusicPlayer(/* musicData */) {
